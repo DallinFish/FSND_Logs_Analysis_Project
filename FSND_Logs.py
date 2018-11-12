@@ -35,8 +35,14 @@ def reporting_tool():
 dbname = "news"
 db = psycopg2.connect(database=dbname)
 c = db.cursor()
+<<<<<<< HEAD
 
 #Creates View that preps log table into joinable format and excludes extra data.
+||||||| merged common ancestors
+#Creating View that preps log table into joinable format and excludes extra data.
+=======
+#Creates View that preps log table into joinable format and excludes extra data.
+>>>>>>> dce357a49ab42bea9aba6938a76af9b243e22e54
 c.execute("create view newlog as select replace(path, '/article/','') as newpath, date(time) as newdate, status from log where path != '/' and status = '200 OK';")
 
 #Query that joins newLog view & articles table for Q1 & stores in ans1
@@ -53,4 +59,21 @@ num_of_records = 4
 topic = "Authors"
 reporting_tool()
 
+<<<<<<< HEAD
 db.close()
+||||||| merged common ancestors
+db.close()
+
+
+=======
+#Basic Tool for reporting Q1 and Q2
+def reporting_tool():
+    i = 0
+    print("Top Most Popular {} of all time are:".format(topic))
+    while i < num_of_records:
+        print("    {} -- {} views".format(ans1[i][0],ans1[i][1]))
+        i += 1
+
+
+db.close()
+>>>>>>> dce357a49ab42bea9aba6938a76af9b243e22e54
