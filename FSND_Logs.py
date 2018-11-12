@@ -21,28 +21,36 @@ import psycopg2
 
 #  July 29, 2016 2.5% errors
 
-dbname = "news"
+#****************************************************************
 
+#Basic Tool for reporting Q1 and Q2
+def reporting_tool():
+    i = 0
+    print("Top Most Popular {} of all time are:".format(topic))
+    while i < num_of_records:
+        print("    {} -- {} views".format(ans1[i][0],ans1[i][1]))
+        i += 1
+
+#Initializes db connection
+dbname = "news"
 db = psycopg2.connect(database=dbname)
 c = db.cursor()
-#Creating View that preps log table into joinable format and excludes extra data.
+
+#Creates View that preps log table into joinable format and excludes extra data.
 c.execute("create view newlog as select replace(path, '/article/','') as newpath, date(time) as newdate, status from log where path != '/' and status = '200 OK';")
 
-#Queary that joins newlog view and articles table for Question 1 and stores in ans1
+#Query that joins newLog view & articles table for Q1 & stores in ans1
 c.execute("Select articles.title, count(*) as num from newlog join articles on articles.slug = newlog.newpath group by articles.title order by num desc;")
 ans1 = c.fetchall()
+num_of_records = 3
+topic = "Articles"
+reporting_tool()
 
-
-i = 0
-print("1. Top Most Popular Articles of all time are:")
-while i < 3:
-    print("    {} -- {} views".format(ans1[i][0],ans1[i][1]))
-    i += 1
-
+#Query that joins newLog, articles, & authors tables for Q2 & stores in ans2
 c.execute("Select newauthor.name, count(*) as num from newlog join (select authors.name, articles.slug from authors join articles on authors.id = articles.author) as newauthor on newauthor.slug = newlog.newpath group by newauthor.name order by num desc;")
 ans2 = c.fetchall()
-print(ans2)
+num_of_records = 4
+topic = "Authors"
+reporting_tool()
 
 db.close()
-
-
