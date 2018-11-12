@@ -47,11 +47,25 @@ c.execute("Select newauthor.name, count(*) as num from newlog join (select autho
 ans2 = c.fetchall()
 num_of_records = 4
 topic = "Authors"
+<<<<<<< HEAD
 i = 0
 print("Top Most Popular {} of all time are:".format(topic))
 while i < num_of_records:
     print("    {} -- {} views".format(ans2[i][0],ans1[i][1]))
     i += 1
 
+||||||| merged common ancestors
+reporting_tool()
+=======
+    i = 0
+    print("Top Most Popular {} of all time are:".format(topic))
+    while i < num_of_records:
+        print("    {} -- {} views".format(ans2[i][0],ans1[i][1]))
+        i += 1
+
+
+
+
+>>>>>>> 4977027da61b001bc8744718e5fa09fd809bebe8
 
 db.close()
