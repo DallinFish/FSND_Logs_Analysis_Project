@@ -23,14 +23,6 @@ import psycopg2
 
 #****************************************************************
 
-#Basic Tool for reporting Q1 and Q2
-def reporting_tool():
-    i = 0
-    print("Top Most Popular {} of all time are:".format(topic))
-    while i < num_of_records:
-        print("    {} -- {} views".format(ans1[i][0],ans1[i][1]))
-        i += 1
-
 #Initializes db connection
 dbname = "news"
 db = psycopg2.connect(database=dbname)
@@ -44,13 +36,25 @@ c.execute("Select articles.title, count(*) as num from newlog join articles on a
 ans1 = c.fetchall()
 num_of_records = 3
 topic = "Articles"
-reporting_tool()
+i = 0
+print("Top Most Popular {} of all time are:".format(topic))
+while i < num_of_records:
+    print("    {} -- {} views".format(ans1[i][0],ans1[i][1]))
+    i += 1
 
 #Query that joins newLog, articles, & authors tables for Q2 & stores in ans2
 c.execute("Select newauthor.name, count(*) as num from newlog join (select authors.name, articles.slug from authors join articles on authors.id = articles.author) as newauthor on newauthor.slug = newlog.newpath group by newauthor.name order by num desc;")
 ans2 = c.fetchall()
 num_of_records = 4
 topic = "Authors"
-reporting_tool()
+    i = 0
+    print("Top Most Popular {} of all time are:".format(topic))
+    while i < num_of_records:
+        print("    {} -- {} views".format(ans2[i][0],ans1[i][1]))
+        i += 1
+
+
+
+
 
 db.close()
