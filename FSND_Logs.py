@@ -64,7 +64,7 @@ c.execute("Select Total_count.newdate, Error_Count.num, Total_Count.num from Err
 #c.execute("Select Total_count.newdate, (Error_Count.num/Total_Count.num*100) as Err_Percent from Error_Count join Total_Count on Error_Count.newdate = Total_Count.newdate order by Err_Percent")
 ans3 = c.fetchall()
 print(ans3)
-num_of_records = 1
+num_of_records = 30
 
 
 #Output of Results for Q3
