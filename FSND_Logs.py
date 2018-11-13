@@ -60,9 +60,16 @@ while i < num_of_records:
 
 c.execute("Create view Total_Count as select count(*) as num, date(time) as newdate from log group by newdate;")
 c.execute("Create view Error_Count as select count(*) as num, date(time) as newdate from log where status != '200 OK' group by newdate;")
-c.execute("Select Error_Count.num/Total_Count.num as Err_Percent, Total_count.newdate from Error_Count join Total_Count on Error_Count.newdate = Total_Count.newdate order by Err_Percent")
+c.execute("Select Total_count.newdate, (Error_Count.num/Total_Count.num*100) as Err_Percent from Error_Count join Total_Count on Error_Count.newdate = Total_Count.newdate order by Err_Percent")
+ans3 = c.fetchall()
+num_of_records = 1
 
-Print(c.fetchall())
 
+#Output of Results for Q3
+i = 0
+print("The Day with the Most Errors was:".format(topic))
+while i < num_of_records:
+    print("    {} -- {} % Errors".format(ans2[i][0],ans1[i][1]))
+    i += 1
 
 db.close()
