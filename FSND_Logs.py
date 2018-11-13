@@ -36,6 +36,8 @@ c.execute("Select articles.title, count(*) as num from newlog join articles on a
 ans1 = c.fetchall()
 num_of_records = 3
 topic = "Articles"
+
+#Output of Results for Q1
 i = 0
 print("Top Most Popular {} of all time are:".format(topic))
 while i < num_of_records:
@@ -47,10 +49,20 @@ c.execute("Select newauthor.name, count(*) as num from newlog join (select autho
 ans2 = c.fetchall()
 num_of_records = 4
 topic = "Authors"
+
+#Output of Results for Q2
 i = 0
 print("Top Most Popular {} of all time are:".format(topic))
 while i < num_of_records:
     print("    {} -- {} views".format(ans2[i][0],ans1[i][1]))
     i += 1
+
+
+c.execute("Create view Total_Count as select count(*) as num, date(time) as newdate from log group by newdate;")
+c.execute("Create view Error_Count as select count(*) as num, date(time), as newdate from log where status != '200 OK' group by newdate;")
+c.execute("Select Error_Count.num/Total_Count.num as Err_Percent, Total_count.newdate from Error_Count join Total_Count on Error_Count.newdate = Total_Count.newdate order by Err_Percent")
+
+Print(c.fetchall())
+
 
 db.close()
