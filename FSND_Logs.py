@@ -69,7 +69,7 @@ num_of_records = 1
 i = 0
 print("The Day with the Most Errors was:".format(topic))
 while i < num_of_records:
-    print("    {} -- {} % Errors".format(ans2[i][0],ans1[i][1]))
+    print("    {} -- {} % Errors".format(ans3[i][0],ans1[i][1]))
     i += 1
 
 db.close()
