@@ -58,14 +58,11 @@ while i < num_of_records:
     i += 1
 
 
-c.execute("Create view Total_Count as select count(*) as num, date(time) as newdate from log group by newdate;")
-c.execute("Create view Error_Count as select count(*) as num, date(time) as newdate from log where status != '200 OK' group by newdate;")
-#c.execute("Select Total_count.newdate, Error_Count.num, Total_Count.num from Error_Count join Total_Count on Error_Count.newdate = Total_Count.newdate")
-c.execute("Select Total_count.newdate, dec(Error_Count.num/Total_Count.num*100) as Err_Percent from Error_Count join Total_Count on Error_Count.newdate = Total_Count.newdate order by Err_Percent")
+c.execute("Create view Total_Count as select count(status) as num, date(time) as newdate from log group by newdate;")
+c.execute("Create view Error_Count as select count(status) as num, date(time) as newdate from log where status != '200 OK' group by newdate;")
+c.execute("Select Total_count.newdate, round(Error_Count.num * 1.0 / Total_Count.num * 100.0, 2) as Err_Percent from Error_Count join Total_Count on Error_Count.newdate = Total_Count.newdate where (Error_Count.num * 1.0 / Total_Count.num * 100.0) > 1.1 order by Err_Percent desc")
 ans3 = c.fetchall()
-print(ans3)
-num_of_records = 30
-
+num_of_records = 1
 
 #Output of Results for Q3
 i = 0
