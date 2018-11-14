@@ -6,14 +6,14 @@ db = psycopg2.connect(database=dbname)
 c = db.cursor()
 
 
-# Creates View that preps log table into joinable format and excludes extra data
+# Creates joinable view for the log table & excludes extra data
 c.execute(
-     "Create view newlog as "
-     "Select replace(path, '/article/','') as newpath, "
-     "date(time) as newdate, "
-     "status "
-     "from log "
-     "where path != '/' and status = '200 OK';")
+    "Create view newlog as "
+    "Select replace(path, '/article/','') as newpath, "
+    "date(time) as newdate, "
+    "status "
+    "from log "
+    "where path != '/' and status = '200 OK';")
 
 # Query that joins newLog view & articles table for Q1 & stores in ans1
 c.execute(
@@ -35,19 +35,18 @@ while i < num_of_records:
     i += 1
 
 
-
 # Query that joins newLog, articles, & authors tables for Q2 & stores in ans2
 c.execute(
-     "Select newauthor.name, "
-     "count(*) as num "
-     "from newlog "
-     "join "
-         "(select authors.name, "
-         "articles.slug "
-         "from authors "
-         "join articles "
-         "on authors.id = articles.author) "
-         "as newauthor "
+    "Select newauthor.name, "
+    "count(*) as num "
+    "from newlog "
+    "join "
+        "(select authors.name, "
+        "articles.slug "
+        "from authors "
+        "join articles "
+        "on authors.id = articles.author) "
+        "as newauthor "
     "on newauthor.slug = newlog.newpath "
     "group by newauthor.name "
     "order by num desc;")
@@ -63,21 +62,27 @@ while i < num_of_records:
     i += 1
 
 
-
-# Creates Views Total Errors & Total Requests & Queries for day over 1.1% Errors
+# Creates Views for Total Errors & Requests & Queries for day over 1.1% Errors
 c.execute(
-     "Create view Total_Count as "
-     "Select count(status) as num, "
-     "date(time) as newdate "
-     "from log "
-     "group by newdate;")
+    "Create view Total_Count as "
+    "Select count(status) as num, "
+    "date(time) as newdate "
+    "from log "
+    "group by newdate;")
 c.execute(
-     "Create view Error_Count as "
-     "Select count(status) as num, "
-     "date(time) as newdate "
-     "from log "
-     "where status != '200 OK' group by newdate;")
-c.execute("Select Total_count.newdate, round(Error_Count.num * 1.0 / Total_Count.num * 100.0, 2) as Err_Percent from Error_Count join Total_Count on Error_Count.newdate = Total_Count.newdate where (Error_Count.num * 1.0 / Total_Count.num * 100.0) > 1.1 order by Err_Percent desc")
+    "Create view Error_Count as "
+    "Select count(status) as num, "
+    "date(time) as newdate "
+    "from log "
+    "where status != '200 OK' group by newdate;")
+c.execute(
+    "Select Total_count.newdate, "
+    "round(Error_Count.num * 1.0 / Total_Count.num * 100.0, 2) as Err_Percent "
+    "from Error_Count "
+    "join Total_Count "
+    "on Error_Count.newdate = Total_Count.newdate "
+    "where (Error_Count.num * 1.0 / Total_Count.num * 100.0) > 1.1 "
+    "order by Err_Percent desc")
 ans3 = c.fetchall()
 
 # Output of Results for Q3
