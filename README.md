@@ -32,7 +32,7 @@ This is a reporting program for the Full-Stack-Nanodegree Course. It answers The
 
 Assuming you have pulled down the files from the repo and are in the environment per the course, run the following command from the terminal:
 
-'''python
+'''
 python FSND_Logs.py
 '''
 
