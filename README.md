@@ -37,3 +37,45 @@ python FSND_Logs.py
 ```
 
 This will display the results to the three questions.
+
+
+## Structure & Design
+
+### Questions 1 & 2
+
+For Questions 1 and 2, I needed to join both the articles & log tables. In the log table the column path was similar to the slug used in the articles table but also contained the entire path of the article. I created a view that removed the /article/ portion of the path so that then articles table would then be able to join the log table. I also removed extra entries to the home page and 404 errors that weren't needed to answer the questions.
+
+'''
+"Create view newlog as "
+  "Select replace(path, '/article/','') as newpath, "
+  "date(time) as newdate, "
+  "status "
+  "from log "
+  "where path != '/' and status = '200 OK';"
+'''
+
+### Question 3
+
+For Question 3 I needed to be able to know the total count of errors and total count of requests for a given day. To make things easy to keep track of I created two views and then joined the two views for a final query.
+
+**Total Count**
+'''
+"Create view Total_Count as "
+  "Select count(status) as num, "
+  "date(time) as newdate "
+  "from log "
+  "group by newdate;
+'''
+
+**Error Count**
+'''
+  "Create view Error_Count as "
+    "Select count(status) as num, "
+    "date(time) as newdate "
+    "from log "
+    "where status != '200 OK' group by newdate;"
+'''
+
+## License
+
+The content of this repository is licensed under a [MIT License](https://choosealicense.com/licenses/mit/)
